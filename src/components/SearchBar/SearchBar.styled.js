@@ -70,3 +70,5 @@ export const Input = styled.input`
     font-size: 18px;
   }
 `;
+
+////dont separate
