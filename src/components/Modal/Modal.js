@@ -1,55 +1,37 @@
-import  {useEffect} from 'react';
+import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { Backdrop, ModalWindow } from './Modal.styled';
 import PropTypes from 'prop-types';
-
 const modalRoot = document.querySelector('#modal-root');
 
-export const Modal = ({onClose, url}) => {
-
+export const Modal = ({ photo, tags, onCloseModal }) => {
+  const handleBackdropClose = e => {
+    if (e.target === e.currentTarget) {
+      onCloseModal();
+    }
+  };
   useEffect(() => {
-   const handleKeyDown = e => {
-      if(e.code === 'Escape') {
-         onClose();
+    const handlerCloseKeydown = e => {
+      if (e.code === 'Escape') {
+        onCloseModal();
       }
-    }
-
-    if (url){
-      window.addEventListener('keydown', handleKeyDown);
-    }
-
-
-    return () => {
-        window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, [url, onClose]); 
-   
-
-   const handleBackdropClick = e => {
-    if (e.currentTarget === e.target) {
-      onClose();
-    }
-  }
-        
-        
-    
-
-  
-        return createPortal (
-            <div className="Overlay" onClick={handleBackdropClick}>
-                <div className="Modal">
-                  <img src={url} alt=''/>
-                </div>
-            </div>,
-            modalRoot,
-        );
     };
+    window.addEventListener('keydown', handlerCloseKeydown);
+    return () => window.removeEventListener('keydown', handlerCloseKeydown);
+  }, [onCloseModal]);
 
-    Modal.propTypes = {
-      onClose: PropTypes.func.isRequired,
-      url: PropTypes.string.isRequired,
-    };
+  return createPortal(
+    <Backdrop onClick={handleBackdropClose}>
+      <ModalWindow>
+        <img src={photo} alt={tags} width="800" height="600" />
+      </ModalWindow>
+    </Backdrop>,
+    modalRoot
+  );
+};
 
-
-    
-
-    
+Modal.propTypes = {
+  tags: PropTypes.string.isRequired,
+  photo: PropTypes.string.isRequired,
+  onCloseModal: PropTypes.func.isRequired,
+};

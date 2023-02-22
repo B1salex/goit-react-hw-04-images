@@ -1,43 +1,27 @@
-import React from 'react';
-import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import PropTypes from 'prop-types';
-
-const  ImageGallery = ({items, searchName, onClick}) => {
-    return (
-        <div>
-            <ul className='ImageGallery'>
-                {items.map(({id, webformatURL, largeImageURL}) => (
-                    <li className='ImageGalleryItem' key={id}>
-                        <ImageGalleryItem
-                        webformatURL={webformatURL}
-                        searchName={searchName}
-                        largeURL={largeImageURL}
-                        onClick={onClick}
-                        />
-                    </li>
-                ))}
-            </ul>
-        </div>
-    )
-}
-
-
-
-// ImageGallery.propTypes = {
-//     items: PropTypes.arrayOf(PropTypes.object),
-//     searchName: PropTypes.string,
-//     onClick: PropTypes.func.isRequired,
-//     id: PropTypes.number,
-// };
+import { GalleryList } from './ImageGallery.styled';
+import { ImageGalleryItems } from '../ImageGalleryItem/ImageGalleryItem';
+export const ImageGallery = ({ images }) => {
+  return (
+    <GalleryList>
+      {images.map(({ id, webformatURL, tags, largeImageURL }) => (
+        <ImageGalleryItems
+          key={id}
+          prewiewImg={webformatURL}
+          tags={tags}
+          largeImageURL={largeImageURL}
+        />
+      ))}
+    </GalleryList>
+  );
+};
 ImageGallery.propTypes = {
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        webformatURL: PropTypes.string.isRequired,
-        largeImageURL: PropTypes.string.isRequired
-      })
-    ).isRequired,
-    searchName: PropTypes.string,
-    onClick: PropTypes.func.isRequired
-  };
-export default ImageGallery;
+  images: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number.isRequired,
+      webformatURL: PropTypes.string.isRequired,
+      largeImageURL: PropTypes.string.isRequired,
+      tags: PropTypes.string.isRequired,
+    })
+  ),
+};

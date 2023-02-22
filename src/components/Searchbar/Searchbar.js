@@ -1,50 +1,34 @@
-import  { useState } from "react";
 import PropTypes from 'prop-types';
+import {
+  Header,
+  SearchForm,
+  SubmitButton,
+  //   SearchButtonLabel,
+  Input,
+} from './SearchBar.styled';
+// import { GoSearch } from 'react-icons/go';
+import { FcSearch } from 'react-icons/fc';
 
+export const SearchBar = ({ onSubmit }) => {
+  return (
+    <Header>
+      <SearchForm onSubmit={onSubmit}>
+        <SubmitButton type="submit">
+          <FcSearch size={30} />
+        </SubmitButton>
 
-export const Searchbar = ({onSubmit}) => {
-    
-    const [imgName, setImgName] = useState('');
-    
+        <Input
+          type="text"
+          name="query"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </SearchForm>
+    </Header>
+  );
+};
 
-   const handleChangeName = e => {
-        setImgName(e.currentTarget.value.toLowerCase())
-    };
-
-    const handleSubmit = e => {
-        e.preventDefault();
-        onSubmit(imgName);
-        // setImgName('');
-     };
-
-
-   
-        return (
-            <header className="Searchbar">
-                <form
-                    className='SearchForm'
-                    onSubmit={handleSubmit}>
-                  <button type="submit" className="SearchForm-button">
-                    <span className="SearchForm-button-label">Search</span>
-                  </button>
-
-
-                    <input
-                        className='SearchForm-input'
-                        type="text"
-                        autoComplete="off"
-                        autoFocus
-                        placeholder="Search images and photos"
-                        onChange={handleChangeName}
-                        value={imgName}
-                    />
-                </form>
-            </header>
-        );
-    }
-
-
-    Searchbar.propTypes = {
-        onSubmit: PropTypes.func.isRequired,
-    };
-        
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};

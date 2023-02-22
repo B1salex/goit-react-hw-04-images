@@ -1,30 +1,27 @@
-import React from "react";
 import PropTypes from 'prop-types';
+import { useState } from 'react';
+import { GalleryListItems, PrewiewPhoto } from './ImageGalleryItem.styled';
+import { Modal } from '../Modal';
 
-const ImageGalleryItem = ({
-    webformatURL,
-    searchName,
-    onClick,
-    largeURL,
-
-}) => {
-    return (
-    <img
-    src={webformatURL}
-    alt={searchName}
-    className='ImageGalleryItem-image'
-    onClick={onClick}
-    data-src={largeURL}
-    />
-    );
+export const ImageGalleryItems = ({ prewiewImg, tags, largeImageURL }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const modalToggle = () => {
+    setIsModalOpen(prevState => !prevState);
   };
+  return (
+    <>
+      <GalleryListItems onClick={modalToggle}>
+        <PrewiewPhoto src={prewiewImg} alt={tags} />
+      </GalleryListItems>
+      {isModalOpen && (
+        <Modal photo={largeImageURL} tags={tags} onCloseModal={modalToggle} />
+      )}
+    </>
+  );
+};
 
-  ImageGalleryItem.propTypes = {
-    webformatURL: PropTypes.string.isRequired,
-    searchName: PropTypes.string,
-    onClick: PropTypes.func.isRequired,
-    largeURL: PropTypes.string,
-
-  }
-
-  export default ImageGalleryItem;
+ImageGalleryItems.propTypes = {
+  prewiewImg: PropTypes.string.isRequired,
+  tags: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
+};
