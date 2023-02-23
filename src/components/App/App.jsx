@@ -20,39 +20,35 @@ export const App = () => {
   const [totalImg, setTotalImg] = useState(0);
 
   useEffect(() => {
-    setError(null);
-  }, []);
-
-  useEffect(() => {
     if (!query) {
       return;
     }
+
+    const getPictures = (query, page) => {
+      setIsLoading(true);
+      imagesAPI
+        .fetchImages(query, page)
+        .then(images => {
+          if (images.hits.length < 1) {
+            toast.info(
+              `😅 Unfortunately the world is not that creative yet, so we did not find pictures on request ${query}. Try something less eccentric and we'll make you happy!`
+            );
+            return;
+          }
+          setQuery(query);
+          setPage(page);
+          setImages(prevImg => [...prevImg, ...images.hits]);
+          setTotalImg(images.totalHits);
+        })
+        .catch(error => {
+          setError(error);
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+    };
     getPictures(query, page);
   }, [query, page]);
-
-  const getPictures = (query, page) => {
-    setIsLoading(true);
-    imagesAPI
-      .fetchImages(query, page)
-      .then(images => {
-        if (images.hits.length < 1) {
-          toast.info(
-            `😅 Unfortunately the world is not that creative yet, so we did not find pictures on request ${query}. Try something less eccentric and we'll make you happy!`
-          );
-          return;
-        }
-        setQuery(query);
-        setPage(page);
-        setImages(prevImg => [...prevImg, ...images.hits]);
-        setTotalImg(images.totalHits);
-      })
-      .catch(error => {
-        setError(error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
 
   const handleSubmit = e => {
     e.preventDefault();
